@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  app:
+    container_name: app
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
+    command: yarn start:dev
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./app/src:/usr/app/src
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    restart: always
+    environment:
+      - DB_HOST=postgres
+    env_file:
+      - .env
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/postgres/data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
