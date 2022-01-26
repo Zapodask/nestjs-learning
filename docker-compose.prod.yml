@@ -1,27 +1,25 @@
 version: "3"
 
 services:
-  dev-app:
-    container_name: dev-app
+  prod-app:
+    container_name: prod-app
     build:
       context: ./app
-      dockerfile: Dockerfile.dev
-    command: yarn start:dev
+      dockerfile: Dockerfile.prod
+    command: node main
     ports:
       - ${PORT}:${PORT}
-    volumes:
-      - ./app/src:/usr/app/src
     depends_on:
-      - dev-postgres
+      - prod-postgres
     networks:
       - app-network
     restart: always
     environment:
-      - DB_HOST=dev-postgres
+      - DB_HOST=prod-postgres
     env_file:
       - .env
-  dev-postgres:
-    container_name: dev-postgres
+  prod-postgres:
+    container_name: prod-postgres
     image: postgres
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -30,7 +28,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./dev-db/postgres/data:/var/lib/postgresql/data
+      - ./prod-db/postgres/data:/var/lib/postgresql/data
     networks:
       - app-network
 

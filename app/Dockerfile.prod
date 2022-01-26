@@ -1,0 +1,11 @@
+FROM node:16.13.2-alpine
+
+WORKDIR /usr/app
+
+COPY /dist/ package.json yarn.lock tsconfig.json tsconfig.build.json ./
+
+RUN yarn
+
+EXPOSE ${PORT}
+
+CMD ["yarn", "start:dev"]
