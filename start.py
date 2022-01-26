@@ -1,4 +1,4 @@
-from black import sys
+import sys
 import keyboard
 import os
 
@@ -69,7 +69,7 @@ class Start:
 
         os.system(docker_cmd)
 
-        sys.exit()
+        sys.exit(0)
 
 
 Start()

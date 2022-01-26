@@ -2,6 +2,8 @@
 
 ## Descrição
 
+Projeto para testar o Nestjs
+
 ## Tecnologias utilizadas
 
 - Docker
@@ -9,6 +11,8 @@
 - Nestjs
 
 ## Instalar
+
+Configure .env
 
 ```bash
 # Dentro da pasta app
@@ -18,7 +22,7 @@ $ yarn
 ## Iniciar
 
 ```bash
-$ python start.py
+$ start.exe
 ```
 
 ## Licença
