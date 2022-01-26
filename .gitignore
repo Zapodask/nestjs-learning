@@ -196,3 +196,4 @@ $RECYCLE.BIN/
 
 # Database
 /db
+.venv
