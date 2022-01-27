@@ -5,27 +5,27 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+import { ApiProperty } from '@nestjs/swagger'
 
-@Entity({ name: 'tools' })
-export class Tool {
+@Entity({ name: 'users' })
+export class User {
   @PrimaryGeneratedColumn()
+  @ApiProperty()
   id: number
 
   @Column('text')
+  @ApiProperty()
   email: string
 
-  @Column('text')
+  @Column('text', { select: false })
+  @ApiProperty()
   password: string
 
-  @Column('text')
-  description: string
-
-  @Column('text', { array: true })
-  tags: string[]
-
-  @CreateDateColumn({ name: 'created_at', select: false })
+  @CreateDateColumn({ name: 'created_at' })
+  @ApiProperty()
   createdAt: Date
 
-  @UpdateDateColumn({ name: 'updated_at', select: false })
+  @UpdateDateColumn({ name: 'updated_at' })
+  @ApiProperty()
   updatedAt: Date
 }
