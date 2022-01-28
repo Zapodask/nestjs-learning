@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
@@ -14,6 +15,14 @@ async function bootstrap() {
     .build()
   const document = SwaggerModule.createDocument(app, swagger)
   SwaggerModule.setup('swagger', app, document)
+
+  // Validar campos
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  )
 
   await app.listen(process.env.PORT)
 }

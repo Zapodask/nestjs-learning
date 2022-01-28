@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
 
@@ -15,6 +16,7 @@ import { ErrorSwagger } from '@swagger/error.swagger'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { AuthGuard } from '@nestjs/passport'
 
 @ApiTags('Users')
 @Controller('users')
@@ -22,6 +24,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Listar usuários' })
   @ApiResponse({
     status: 200,
@@ -66,14 +69,8 @@ export class UsersController {
     description: 'Usuário não encontrado',
     type: ErrorSwagger,
   })
-  async findOne(@Param('id') id: string) {
-    const user = await this.usersService.findOne(+id)
-
-    if (!user) {
-      throw new NotFoundException('Usuário não encontrado')
-    }
-
-    return user
+  async findOne(@Param('id') id: number) {
+    return await this.usersService.findOne({ id })
   }
 
   @Patch(':id')

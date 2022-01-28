@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -6,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { ApiProperty } from '@nestjs/swagger'
+import { hashSync } from 'bcrypt'
 
 @Entity({ name: 'users' })
 export class User {
@@ -28,4 +30,9 @@ export class User {
   @UpdateDateColumn({ name: 'updated_at' })
   @ApiProperty()
   updatedAt: Date
+
+  @BeforeInsert()
+  hashPassword() {
+    this.password = hashSync(this.password, 10)
+  }
 }

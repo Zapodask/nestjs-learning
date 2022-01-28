@@ -1,6 +1,10 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { FindConditions, FindOneOptions, Repository } from 'typeorm'
 
 import { User } from '@models/user.entity'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -30,6 +34,8 @@ export class UsersService {
       }
     }
 
+    delete save.password
+
     return save
   }
 
@@ -39,10 +45,18 @@ export class UsersService {
     return users
   }
 
-  async findOne(id: number) {
-    const user = await this.usersRepository.findOne(id)
-
-    return user
+  async findOne(
+    conditions: FindConditions<User>,
+    findOneOptions?: FindOneOptions<User>,
+  ) {
+    try {
+      return await this.usersRepository.findOneOrFail(
+        conditions,
+        findOneOptions,
+      )
+    } catch (error) {
+      throw new NotFoundException('Usuário não encontrado')
+    }
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
