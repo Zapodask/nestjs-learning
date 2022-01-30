@@ -16,6 +16,21 @@ export class UsersService {
     @InjectRepository(User) public readonly usersRepository: Repository<User>,
   ) {}
 
+  async findAll(page = 1, perPage = 10) {
+    const [users, total] = await this.usersRepository.findAndCount({
+      skip: (page - 1) * perPage,
+      take: perPage,
+    })
+
+    return {
+      users: users,
+      page: page,
+      lastPage: Math.ceil(total / perPage),
+      perPage: perPage,
+      total: total,
+    }
+  }
+
   async create(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto
 
@@ -37,12 +52,6 @@ export class UsersService {
     delete save.password
 
     return save
-  }
-
-  async findAll() {
-    const users = await this.usersRepository.find()
-
-    return users
   }
 
   async findOne(

@@ -8,15 +8,22 @@ import {
   Delete,
   NotFoundException,
   UseGuards,
+  Query,
 } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger'
 
-import { UserSwagger } from '@swagger/users.swagger'
+import { PaginatedUsers, UserSwagger } from '@swagger/users.swagger'
 import { ErrorSwagger } from '@swagger/error.swagger'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { AuthGuard } from '@nestjs/passport'
+import { FindAllQueryDto } from './dto/find-all-query.dto'
 
 @ApiTags('Users')
 @Controller('users')
@@ -28,12 +35,13 @@ export class UsersController {
   @ApiOperation({ summary: 'Listar usuários' })
   @ApiResponse({
     status: 200,
-    description: 'Usuários listados',
-    type: UserSwagger,
+    description: 'Usuários listados com sucesso',
+    type: PaginatedUsers,
     isArray: true,
   })
-  findAll() {
-    return this.usersService.findAll()
+  @ApiBearerAuth()
+  findAll(@Query() query: FindAllQueryDto) {
+    return this.usersService.findAll(query.page, query.perPage)
   }
 
   @Post()
@@ -58,6 +66,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Buscar usuário' })
   @ApiResponse({
     status: 200,
@@ -69,11 +78,13 @@ export class UsersController {
     description: 'Usuário não encontrado',
     type: ErrorSwagger,
   })
+  @ApiBearerAuth()
   async findOne(@Param('id') id: number) {
     return await this.usersService.findOne({ id })
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Modificar usuário' })
   @ApiResponse({ status: 200, description: 'Usuário modificado' })
   @ApiResponse({
@@ -81,6 +92,7 @@ export class UsersController {
     description: 'Usuário não encontrado',
     type: ErrorSwagger,
   })
+  @ApiBearerAuth()
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const user = await this.usersService.update(+id, updateUserDto)
 
@@ -92,6 +104,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Deletar usuário' })
   @ApiResponse({ status: 200, description: 'Usuário deletado' })
   @ApiResponse({
@@ -99,6 +112,7 @@ export class UsersController {
     description: 'Usuário não encontrado',
     type: ErrorSwagger,
   })
+  @ApiBearerAuth()
   async remove(@Param('id') id: string) {
     const user = await this.usersService.remove(+id)
 

@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('Nestjs learning')
     .setDescription('')
     .setVersion('1.0')
+    .addBearerAuth()
     .build()
   const document = SwaggerModule.createDocument(app, swagger)
   SwaggerModule.setup('swagger', app, document)
