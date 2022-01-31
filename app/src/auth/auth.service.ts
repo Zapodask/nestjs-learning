@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { User } from '@models/user.entity'
-import { compareSync } from 'bcrypt'
+import { compareSync, hashSync } from 'bcrypt'
 
 import { UsersService } from '@src/users/users.service'
 import { JwtService } from '@nestjs/jwt'
@@ -35,5 +35,20 @@ export class AuthService {
     if (!isPasswordValid) return null
 
     return user
+  }
+
+  async changePassword(id: number, password: string, newPassword: string) {
+    const user = await this.usersService.findOne(
+      { id },
+      { select: ['id', 'email', 'password'] },
+    )
+
+    if (!compareSync(password, user.password)) {
+      throw new UnauthorizedException('Senha inválida')
+    }
+
+    newPassword = hashSync(newPassword, 10)
+
+    return await this.usersService.update(id, { password: newPassword })
   }
 }
