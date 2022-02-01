@@ -23,6 +23,11 @@ export class users1643082160157 implements MigrationInterface {
         isNullable: false,
       },
       {
+        name: 'acl',
+        type: 'varchar',
+        isNullable: false,
+      },
+      {
         name: 'created_at',
         type: 'timestamptz',
         isNullable: false,

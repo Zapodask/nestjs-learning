@@ -9,6 +9,8 @@ import {
 import { ApiProperty } from '@nestjs/swagger'
 import { hashSync } from 'bcrypt'
 
+export type Roles = 'client' | 'admin'
+
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
@@ -22,6 +24,14 @@ export class User {
   @Column('text', { select: false })
   @ApiProperty()
   password: string
+
+  @Column({
+    type: 'enum',
+    enum: ['client', 'admin'],
+    default: 'client',
+  })
+  @ApiProperty()
+  acl: Roles
 
   @CreateDateColumn({ name: 'created_at' })
   @ApiProperty()

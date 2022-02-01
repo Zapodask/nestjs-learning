@@ -21,6 +21,7 @@ import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Message } from '@swagger/basic.swagger'
+import { AdminGuard } from '@src/guards/admin.guard'
 
 @ApiTags('Users')
 @Controller('users')
@@ -29,6 +30,7 @@ export class UsersController {
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'Listar usuários' })
   @ApiResponse({
     status: 200,

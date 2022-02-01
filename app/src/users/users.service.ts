@@ -37,6 +37,7 @@ export class UsersService {
     const tool = await this.usersRepository.create({
       email: email,
       password: password,
+      acl: 'client',
     })
 
     let save = {} as User
