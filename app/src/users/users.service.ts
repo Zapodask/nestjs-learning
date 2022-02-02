@@ -16,7 +16,7 @@ export class UsersService {
     @InjectRepository(User) public readonly usersRepository: Repository<User>,
   ) {}
 
-  async findAll(page = 1, perPage = 10) {
+  async findAll(page: number | 1, perPage: number | 10) {
     const [users, total] = await this.usersRepository.findAndCount({
       skip: (page - 1) * perPage,
       take: perPage,
@@ -32,12 +32,12 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const { email, password } = createUserDto
+    const { email, password, acl } = createUserDto
 
     const tool = await this.usersRepository.create({
       email: email,
       password: password,
-      acl: 'client',
+      acl: acl,
     })
 
     let save = {} as User

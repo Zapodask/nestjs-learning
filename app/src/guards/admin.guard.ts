@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
-import { UsersService } from '@src/users/users.service'
+
+import { UsersService } from '@users/users.service'
 import { ExtractJwt, Strategy } from 'passport-jwt'
 
 @Injectable()
@@ -20,7 +21,6 @@ export class AdminGuard extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Usuário não possui acesso')
     }
 
-    console.log(user)
     return { id: payload.sub }
   }
 }

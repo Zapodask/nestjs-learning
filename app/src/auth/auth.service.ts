@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { User } from '@models/user.entity'
 import { compareSync, hashSync } from 'bcrypt'
 
-import { UsersService } from '@src/users/users.service'
+import { UsersService } from '@users/users.service'
 import { JwtService } from '@nestjs/jwt'
 
 @Injectable()

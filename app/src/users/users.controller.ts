@@ -21,7 +21,7 @@ import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Message } from '@swagger/basic.swagger'
-import { AdminGuard } from '@src/guards/admin.guard'
+import { AdminGuard } from '@guards/admin.guard'
 
 @ApiTags('Users')
 @Controller('users')

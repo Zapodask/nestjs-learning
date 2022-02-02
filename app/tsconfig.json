@@ -18,9 +18,11 @@
     "noFallthroughCasesInSwitch": false,
     "baseUrl": "./",
     "paths": {
-      "@src/*": ["./src/*"],
       "@models/*": ["./src/db/models/*"],
-      "@swagger/*": ["./src/swagger/*"]
+      "@swagger/*": ["./src/swagger/*"],
+      "@guards/*": ["./src/guards/*"],
+      "@users/*": ["./src/users/*"],
+      "@auth/*": ["./src/auth/*"],
     }
   }
 }
